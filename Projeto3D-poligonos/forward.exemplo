@@ -1,0 +1,46 @@
+function  Tpoint2d.calculaDeltaForwardDifferences(P1, P2, P3, P4 : Integer; T : integer) : TMat1;
+var aux : TPoint2d;
+    matrizDelta, gbs, matrizCalc : TMat1;
+    mbs : TMat2;
+    pot2, pot3, umSexto, delta, delta2, delta3: real;
+    teste : integer;
+begin
+  delta  := t/100;
+  delta2 := potencia(delta, 2);
+  delta3 := potencia(delta, 3);
+// matriz de bezier
+  mbs[1,1] :=  1;
+  mbs[1,2] :=  3;
+  mbs[1,3] := -3;
+  mbs[1,4] :=  1;
+  mbs[2,1] :=  3;
+  mbs[2,2] := -6;
+  mbs[2,3] :=  3;
+  mbs[2,4] :=  0;
+  mbs[3,1] := -3;
+  mbs[3,2] :=  3;
+  mbs[3,3] :=  0;
+  mbs[3,4] :=  0;
+  mbs[4,1] :=  1;
+  mbs[4,2] :=  0;
+  mbs[4,3] :=  0;
+  mbs[4,4] :=  0;
+
+  gbs[1]   := p1;
+  gbs[2]   := p2;
+  gbs[3]   := p3;
+  gbs[4]   := p4;
+
+  matrizCalc := multiplicaMatriz(gbs, mbs, 4);
+
+// matriz de forward differences
+  matrizDelta[1] :=     matrizCalc[4];
+  matrizDelta[2] :=     matrizCalc[1]*delta3 +     
+                        matrizCalc[2]*delta2 + 
+                        matrizCalc[3]*delta;
+  matrizDelta[3] := 6 * matrizCalc[1]*delta3 + 
+                    2 * matrizCalc[2]*delta2;
+  matrizDelta[4] := 6 * matrizCalc[1]*delta3;
+
+  calculaDeltaForwardDifferences := matrizDelta;
+end;
